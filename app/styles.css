@@ -5,3 +5,5 @@
 @media(max-width:620px){.page-shell{padding:16px 14px}.topbar{margin-bottom:19px}.privacy-pill{font-size:0;padding:9px}.privacy-pill:first-letter{font-size:11px}.hero{padding:25px 22px;min-height:0}.hero h1{font-size:29px}.hero-art{display:none}.hero-copy>p:not(.eyebrow){font-size:12px}.trust-row{font-size:9px;gap:7px 12px}.workspace{grid-template-columns:1fr;gap:13px;margin-top:14px}.flow-card{padding:20px 17px;min-height:0}.flow-head h2{font-size:18px}.side-column{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}.value-card{grid-column:1/-1}.privacy-card{margin-top:0;padding:12px}.analytics-toggle{grid-column:1/-1;margin-top:1px}.analytics-card{grid-column:1/-1;margin-top:-6px}.debug-toggle{grid-column:1/-1}.footer{font-size:8px;margin-top:18px}.field-grid{gap:13px 10px}.button-row{flex-wrap:wrap}.button-row .primary-button{flex:1}.footer span:last-child{line-height:1.4}}
 
 .feedback-confirmation{background:#eaf7f0;color:#286745;padding:8px 10px;border-radius:8px;font-size:11px}
+/* Keep the local analytics disclosure visible before the panel is opened. */
+.analytics-note{font-size:10px;line-height:1.5;color:#718095;margin:8px 0 0}

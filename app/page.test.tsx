@@ -73,7 +73,13 @@ describe("Pausa MX decision flow", () => {
     expect(events.map((e: {eventName:string}) => e.eventName)).toEqual(expect.arrayContaining(["quick_check_started", "quick_check_completed", "result_viewed", "feedback_helpful_maybe", "feedback_submitted"]));
     expect(JSON.stringify(events)).not.toContain("Faltó claridad");
     fireEvent.click(screen.getByRole("button", { name: /Analítica de demostración/ }));
-    expect(screen.getByText(/Not production behavioral tracking/)).toBeInTheDocument();
+    expect(screen.getByText(/No es seguimiento de comportamiento en producción/)).toBeInTheDocument();
+  });
+  it("discloses local usage events, including continue anyway, before opening analytics", () => {
+    render(<Home />);
+    expect(screen.getByText(/registra eventos de uso, incluso si continúas de todos modos/i)).toBeInTheDocument();
+    expect(screen.getByText(/sin montos ni datos de compra/i)).toBeInTheDocument();
+    expect(screen.getByText(/revisarlos o borrarlos/i)).toBeInTheDocument();
   });
   it("allows skipping feedback and keeps recommendation independent", () => {
     render(<Home />);
