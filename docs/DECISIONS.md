@@ -36,3 +36,15 @@ Analytics are local to this browser and contain only event name, timestamp, loca
 ## Tomorrow’s first move
 
 Run five moderated sessions with target shoppers, including at least three strangers. Time the Pausa MX flow against each person’s current free substitute, record where they hesitate, and ask whether the result clarified or changed their decision. Fix the worst observed confusion before any deployment.
+
+## Pre-Deploy Security Patch
+
+- **Vulnerability found:** npm audit reported one high-severity PostCSS advisory group, including source-map path traversal / file disclosure (GHSA-r28c-9q8g-f849) and related advisories. It also reported Next as a moderate affected dependency because Next bundled the vulnerable PostCSS version.
+- **Dependency cause:** Next 15.5.28 pinned nested `postcss` 8.4.31. The latest Next 15 patch available during this remediation (15.5.29) still pins 8.4.31. The fixed Next release supplies PostCSS 8.5.23.
+- **Version change:** Next.js 15.5.28 → 16.4.5. React and React DOM stay at 19.1.1. Next’s PostCSS moves 8.4.31 → 8.5.23; the existing Tailwind/Vite PostCSS remains 8.5.32. No product behavior or finance logic changed.
+- **Compatibility changes:** Node 24 satisfies Next 16’s Node >=20.9 requirement and existing React 19.1.1 satisfies Next’s peer range. Next 16 builds with Turbopack successfully. Its build made the standard `tsconfig.json` adjustments: `jsx: react-jsx` and inclusion of `.next/dev/types/**/*.ts`; generated `next-env.d.ts` types were refreshed.
+- **Audit result:** `npm.cmd audit` reports 0 vulnerabilities (0 high, 0 critical).
+- **Test result:** `npm.cmd test` passes, 26 tests across 5 files.
+- **Build result:** `npm.cmd run build` passes on Next.js 16.4.5.
+- **Unresolved security risks:** No dependency advisories are reported by the current full audit. Dependency advisories can change; rerun audit before release. No deployment or remote-data system was introduced.
+- **Tomorrow's first move:** GitHub + Deploy #1.
