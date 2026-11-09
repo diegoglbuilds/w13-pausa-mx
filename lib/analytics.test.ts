@@ -23,8 +23,10 @@ describe("local analytics", () => {
   });
   it("fails gracefully when localStorage throws", () => {
     const spy = vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => { throw new Error("disabled"); });
+    const writeSpy = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => { throw new Error("disabled"); });
     expect(readEvents()).toEqual([]);
     expect(logEvent("quick_check_started", "quick_check")).toBe(false);
     spy.mockRestore();
+    writeSpy.mockRestore();
   });
 });
