@@ -28,6 +28,16 @@ describe("Pausa MX decision flow", () => {
     expect(screen.getAllByText("$1,000.00").length).toBeGreaterThan(0);
     expect(screen.getByText(/No conocemos comisiones/)).toBeInTheDocument();
     expect(screen.queryByLabelText("Gastos esenciales")).not.toBeInTheDocument();
+    const events = JSON.parse(localStorage.getItem("pausa-mx.analytics.v1")!);
+    expect(events.filter((e: {eventName:string}) => e.eventName === "result_viewed")).toHaveLength(0);
+  });
+  it("logs result_viewed once, only when the result screen is reached", () => {
+    render(<Home />);
+    fireEvent.change(screen.getByLabelText("Precio de compra"), { target: { value: "12000" } });
+    fireEvent.click(screen.getByRole("button", { name: /Ver consecuencia/ }));
+    expect(JSON.parse(localStorage.getItem("pausa-mx.analytics.v1")!).filter((e: {eventName:string}) => e.eventName === "result_viewed")).toHaveLength(0);
+    fireEvent.click(screen.getByRole("button", { name: /Esto me basta/ }));
+    expect(JSON.parse(localStorage.getItem("pausa-mx.analytics.v1")!).filter((e: {eventName:string}) => e.eventName === "result_viewed")).toHaveLength(1);
   });
   it("logs opening optional context and can skip it", () => {
     render(<Home />);

@@ -48,3 +48,15 @@ Run five moderated sessions with target shoppers, including at least three stran
 - **Build result:** `npm.cmd run build` passes on Next.js 16.4.5.
 - **Unresolved security risks:** No dependency advisories are reported by the current full audit. Dependency advisories can change; rerun audit before release. No deployment or remote-data system was introduced.
 - **Tomorrow's first move:** GitHub + Deploy #1.
+
+## Mechanical Test — Post Deploy #1
+
+- **Testing method:** Source and flow review against `docs/PACKET.md`, followed by Vitest/Testing Library regression coverage for the consequence-to-result transition. No user sessions or browser interactions are represented as observed evidence.
+- **Browser automation available:** No browser automation tool is available in this environment.
+- **Production browser verification available:** No. The production alias was not verified in a browser.
+- **Real bug found:** `result_viewed` was logged when Quick Check first displayed the consequence card, before the result screen appeared. Reaching the result later logged the event again.
+- **Why it mattered:** Abandonments at the consequence screen inflated result-view counts, and completed flows could count two result views. This compromised the MONEY funnel measurement and misrepresented what users actually saw.
+- **Fix applied:** Removed the premature `result_viewed` event from Quick Check submission. The event is now emitted only by the transition that opens the result screen.
+- **Regression test:** Added a UI flow test asserting zero `result_viewed` events on the consequence screen and exactly one after opening the result.
+- **Remaining risks:** Production behavior remains unverified in a browser; no real-user evidence exists. Equal-installment estimates, fees, and unseen obligations remain limitations described above.
+- **Next session first move:** Persona test.

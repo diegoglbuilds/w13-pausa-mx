@@ -28,7 +28,7 @@ export default function Home() {
     const parsed = quickCheckSchema.safeParse(input);
     if (!parsed.success) { setError(parsed.error.issues[0]?.message ?? "Revisa los datos."); return; }
     setInput(parsed.data); setError("");
-    update(() => { logEvent("quick_check_started", "quick_check"); logEvent("quick_check_completed", "consequence"); logEvent("result_viewed", "consequence"); });
+    update(() => { logEvent("quick_check_started", "quick_check"); logEvent("quick_check_completed", "consequence"); });
     setStep("consequence");
   };
   const openContext = () => { update(() => logEvent("context_opened", "context")); setStep("context"); };
