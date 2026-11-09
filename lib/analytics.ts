@@ -11,6 +11,17 @@ const allowedScreens: Screen[] = ["quick_check", "consequence", "context", "resu
 
 function storage() { try { return typeof window === "undefined" ? null : window.localStorage; } catch { return null; } }
 function validSession(value: unknown): value is string { return typeof value === "string" && /^[a-z0-9-]{8,64}$/i.test(value); }
+function isLocalEvent(value: unknown): value is LocalEvent {
+  if (!value || typeof value !== "object") return false;
+  const event = value as Record<string, unknown>;
+  const allowed = ["eventName", "timestamp", "sessionId", "screen", "metadata"];
+  if (Object.keys(event).some(key => !allowed.includes(key))) return false;
+  if (!EVENT_NAMES.includes(event.eventName as EventName) || typeof event.timestamp !== "string" || Number.isNaN(Date.parse(event.timestamp)) || !validSession(event.sessionId) || !allowedScreens.includes(event.screen as Screen)) return false;
+  if (event.metadata === undefined) return true;
+  if (!event.metadata || typeof event.metadata !== "object") return false;
+  const metadata = event.metadata as Record<string, unknown>;
+  return Object.keys(metadata).every(key => key === "category") && ["yes", "maybe", "no"].includes(String(metadata.category));
+}
 export function getSessionId(): string {
   const target = storage();
   try {
@@ -25,7 +36,7 @@ export function readEvents(): LocalEvent[] {
   try {
     const parsed: unknown = JSON.parse(storage()?.getItem(STORAGE_KEY) ?? "[]");
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter((item): item is LocalEvent => Boolean(item && typeof item === "object" && EVENT_NAMES.includes(item.eventName) && typeof item.timestamp === "string" && validSession(item.sessionId) && allowedScreens.includes(item.screen)));
+    return parsed.filter(isLocalEvent);
   } catch { return []; }
 }
 export function logEvent(eventName: string, screen: Screen, metadata?: LocalEvent["metadata"]): boolean {
